@@ -7,10 +7,57 @@ export default class App extends Component {
     super(props);
     this.state = {
       numero: 0,
-      a: 'teste'
+      botao: 'VAI'
     };
 
+    this.timer = null;
+
+    this.vai = this.vai.bind(this);
+    this.limpar = this.limpar.bind(this);
   }
+
+  vai(){
+    let state = this.state;
+
+    if(this.timer != null){
+
+      //Aqui vai parar o timer
+      clearInterval(this.timer);
+      this.timer = null;
+
+      state.botao = "VAI";
+
+    }else{
+
+      // Comeca girar o timer!
+      this.timer = setInterval(()=>{
+        let state = this.state;
+        state.numero += 0.1;
+        this.setState(state);
+      },100);
+
+      state.botao = "PARAR";
+
+    }
+
+    this.setState(state);
+  }
+
+  limpar(){
+
+    if(this.timer != null){
+
+      //Aqui vai parar o timer
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+
+    let state = this.state;
+    state.numero = 0;
+    state.botao = "VAI";
+    this.setState(state);
+  }
+
 
   render(){
     return (
@@ -19,10 +66,10 @@ export default class App extends Component {
         <Text style={styles.timer}>{this.state.numero.toFixed(1)}</Text>
         
         <View style={styles.btnArea}>
-          <TouchableOpacity style={styles.botao}>
-            <Text style={styles.btnTexto}>VAI</Text>
+          <TouchableOpacity style={styles.botao} onPress={this.vai}>
+            <Text style={styles.btnTexto}>{this.state.botao}</Text>
           </TouchableOpacity>
-        <TouchableOpacity style={styles.botao}>
+        <TouchableOpacity style={styles.botao} onPress={this.limpar}>
             <Text style={styles.btnTexto}>LIMPAR</Text>
           </TouchableOpacity>
         </View>
